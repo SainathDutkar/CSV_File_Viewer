@@ -1,19 +1,21 @@
 <?php
+
 class htmlTable extends page {
 
 public function get(){
 $csvFile=$_REQUEST["filename"];
 $row = 1;
-if (($handle = fopen("uploads/".$csvFile, "r")) !== FALSE) {
-    
-    echo '<table border="1">';
+$tabledata = "";
+if (($handle = fopen("uploads/".$csvFile, "r")) !== FALSE) 
+{
+    $tabledata .= '<table border="1">';
     
     while (($data = fgetcsv($handle)) !== FALSE) {
         $num = count($data);
         if ($row == 1) {
-            echo '<thead><tr>';
+            $tabledata .= '<thead><tr>';
         }else{
-            echo '<tr>';
+            $tabledata .= '<tr>';
         }
         
         for ($c=0; $c < $num; $c++) {
@@ -24,22 +26,23 @@ if (($handle = fopen("uploads/".$csvFile, "r")) !== FALSE) {
                $value = $data[$c];
             }
             if ($row == 1) {
-                echo '<th>'.$value.'</th>';
+                $tabledata .= '<th>'.$value.'</th>';
             }else{
-                echo '<td>'.$value.'</td>';
+                $tabledata .= '<td>'.$value.'</td>';
             }
         }
         
         if ($row == 1) {
-            echo '</tr></thead><tbody>';
+            $tabledata .= '</tr></thead><tbody>';
         }else{
-            echo '</tr>';
+            $tabledata .= '</tr>';
         }
         $row++;
     }
     
-    echo '</tbody></table>';
+    $tabledata .= '</tbody></table>';
     fclose($handle);
+    $this->html .= $tabledata;
 }
 }
 }
